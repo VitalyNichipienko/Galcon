@@ -32,7 +32,18 @@ public class Planet : MonoBehaviour
 
     private void FixedUpdate()
     {
-        CurrentState.RespawnShips();
+        if (CurrentState != NeutralPlanetState)
+        {
+            seconds += 0.02f;
+
+            if (seconds >= 1)
+            {
+                seconds = 0;
+                countShips += 5;
+            }
+        }
+
+        //CurrentState.RespawnShips();
         countShipsText.text = countShips.ToString();
     }
 

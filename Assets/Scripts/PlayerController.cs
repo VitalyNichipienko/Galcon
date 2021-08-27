@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -34,14 +33,20 @@ public class PlayerController : MonoBehaviour
 
     private void SelectionPlanet()
     {
-        //Ray ray;
-        //if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        //{
-        //    ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-        //}
+        //        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        //        {
+        //            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+        //        }
+        //#if UNITY_EDITOR || UNITY_STANDALONE
+        //        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //#else
+        //                if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
+        //                {
+        //                    ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+        //                }
+        //#endif
 
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit) && hit.collider.gameObject.GetComponent<Planet>())
@@ -50,14 +55,14 @@ public class PlayerController : MonoBehaviour
 
             if (newSelectablePlanet.CurrentState == newSelectablePlanet.PlayerPlanetState)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                if (Input.GetKeyDown(KeyCode.Mouse0) || Input.touchCount > 0)
                 {
-                    if (!selectedPlanets.Contains(newSelectablePlanet)) // Если планеты нет в списке выделеных
+                    if (!selectedPlanets.Contains(newSelectablePlanet))
                     {
                         HighlightPlanet(newSelectablePlanet);
                         selectedPlanets.Add(newSelectablePlanet);
                     }
-                    else // Если есть в списке выделенных
+                    else
                     {
                         DeHighlightPlanet(newSelectablePlanet);
                         selectedPlanets.Remove(newSelectablePlanet);
@@ -67,7 +72,7 @@ public class PlayerController : MonoBehaviour
 
             if (newSelectablePlanet.CurrentState != newSelectablePlanet.PlayerPlanetState && selectedPlanets.Count != 0)
             {
-                if (Input.GetKeyDown(KeyCode.Mouse0))
+                if (Input.GetKeyDown(KeyCode.Mouse0) || Input.touchCount > 0)
                 {
                     targetPlanet = newSelectablePlanet;
 
@@ -75,9 +80,6 @@ public class PlayerController : MonoBehaviour
                     {
                         SendShips(planet, targetPlanet);
                     }
-
-                    newSelectablePlanet.SetState(newSelectablePlanet.PlayerPlanetState);
-                    playerPlanets.Add(newSelectablePlanet.gameObject);
 
                     selectedPlanets.Clear();
                     targetPlanet = null;
@@ -109,16 +111,33 @@ public class PlayerController : MonoBehaviour
 
         DeHighlightPlanet(currentPlanet);
 
+        int countShipsSent = currentPlanet.countShips / 2;
+        
+        currentPlanet.countShips -= countShipsSent;
 
-        for (int i = 0; i < currentPlanet.countShips / 2; i++)
+        for (int i = 0; i < countShipsSent; i++)
         {
             GameObject ship = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.PlayerShip);
             ship.transform.position = currentPlanet.transform.position;
             ship.GetComponent<Ship>().MoveToPlanet(currentPlanet, targetPlanet);
         }
 
-        currentPlanet.countShips /= 2;
+        if (targetPlanet.CurrentState != targetPlanet.PlayerPlanetState)
+        {
+            targetPlanet.countShips -= countShipsSent;
+
+            if (targetPlanet.countShips <= 0)
+            {
+                targetPlanet.SetState(targetPlanet.PlayerPlanetState);                
+                targetPlanet.countShips *= -1;
+                playerPlanets.Add(targetPlanet.gameObject);
+            }
+        }
+        else
+        {
+            targetPlanet.countShips += countShipsSent;
+        }
     }
 
-    #endregion
+#endregion
 }
