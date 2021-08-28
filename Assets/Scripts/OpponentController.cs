@@ -29,7 +29,7 @@ public class OpponentController : Controller
         {
             yield return new WaitForSeconds(decisionSpeed);
 
-            if (capturedPlanets.Count == 0)
+            if (capturedPlanets.Count == 0 || capturedPlanets.Count >= FindObjectsOfType<Planet>().Length)
             {
                 gameObject.SetActive(false);
                 break;
@@ -39,9 +39,6 @@ public class OpponentController : Controller
 
             while (true)
             {
-                if (capturedPlanets.Count >= FindObjectsOfType<Planet>().Length)
-                    break;
-
                 targetPlanet = FindObjectsOfType<Planet>()[Random.Range(0, FindObjectsOfType<Planet>().Length)];
                 if (targetPlanet.CurrentState != planetState)
                 {
