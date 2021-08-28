@@ -118,7 +118,9 @@ public class PlayerController : MonoBehaviour
         for (int i = 0; i < countShipsSent; i++)
         {
             GameObject ship = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.PlayerShip);
-            ship.transform.position = currentPlanet.transform.position;
+            ship.transform.position = new Vector3(currentPlanet.transform.position.x + Random.Range(-0.5f, 0.5f), 
+                                                  currentPlanet.transform.position.y + Random.Range(-0.5f, 0.5f), 
+                                                  currentPlanet.transform.position.z);
             ship.GetComponent<Ship>().MoveToPlanet(targetPlanet);
         }
 
