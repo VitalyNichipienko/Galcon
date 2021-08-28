@@ -35,7 +35,16 @@ public class OpponentController : Controller
                 break;
             }
 
-            selectedPlanets.Add(capturedPlanets[Random.Range(0, capturedPlanets.Count - 1)]);
+            selectedPlanets.Add(capturedPlanets[Random.Range(0, capturedPlanets.Count)]);
+
+            for (int i = 0; i < capturedPlanets.Count; i++)
+            {
+                float rand = Random.Range(0.0f, 1.0f);
+                if (rand >= 0.8 && !selectedPlanets.Contains(capturedPlanets[i]))
+                {
+                    selectedPlanets.Add(capturedPlanets[i]);
+                }
+            }
 
             while (true)
             {
