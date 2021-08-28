@@ -3,12 +3,11 @@
 public class Ship : MonoBehaviour
 {
     #region Fields       
-
-    public Planet currentPlanet;
-    public Planet targetPlanet;
-
-    public bool isMove = false;
+        
+    private bool isMove = false;
+    private Planet targetPlanet;
     [SerializeField] private float speed;
+    [SerializeField] private ObjectPooler.Pool.ObjectType type;
 
     #endregion
 
@@ -21,20 +20,19 @@ public class Ship : MonoBehaviour
         if (isMove == false)
         {
             return;
-        }            
+        }
 
         transform.position = Vector2.MoveTowards(transform.position, targetPlanet.transform.position, speed * Time.deltaTime);
 
         if (transform.position == targetPlanet.transform.position)
         {
-            ObjectPooler.Instance.ReturnToPool(ObjectPooler.Pool.ObjectType.PlayerShip, gameObject);
+            ObjectPooler.Instance.ReturnToPool(type, gameObject);
         }
     }
 
 
-    public void MoveToPlanet(Planet currentPlanet, Planet targetPlanet)
+    public void MoveToPlanet(Planet targetPlanet)
     {
-        this.currentPlanet = currentPlanet;
         this.targetPlanet = targetPlanet;
 
         isMove = true;

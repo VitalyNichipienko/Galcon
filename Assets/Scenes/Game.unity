@@ -242,7 +242,7 @@ MonoBehaviour:
     startSize: 2
     root: {fileID: 0}
   - type: 2
-    prefab: {fileID: 6748121938050502791, guid: 8b48faf61aca8fd4a87df95e9380c817, type: 3}
+    prefab: {fileID: 2725223781186673406, guid: 8b48faf61aca8fd4a87df95e9380c817, type: 3}
     startSize: 0
     root: {fileID: 0}
   - type: 3

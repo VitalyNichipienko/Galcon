@@ -119,7 +119,7 @@ public class PlayerController : MonoBehaviour
         {
             GameObject ship = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.PlayerShip);
             ship.transform.position = currentPlanet.transform.position;
-            ship.GetComponent<Ship>().MoveToPlanet(currentPlanet, targetPlanet);
+            ship.GetComponent<Ship>().MoveToPlanet(targetPlanet);
         }
 
         if (targetPlanet.CurrentState != targetPlanet.PlayerPlanetState)
