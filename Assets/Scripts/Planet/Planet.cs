@@ -22,7 +22,7 @@ public class Planet : MonoBehaviour
 
     #region Methods
 
-    private void Start()
+    private void Awake()
     {
         SetState(NeutralPlanetState);
 

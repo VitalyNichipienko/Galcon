@@ -1,27 +1,14 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : Controller
 {
-    #region Fields
-
-    [SerializeField] private List<Planet> selectedPlanets;
-    [SerializeField] private Planet targetPlanet;
-
-    public List<GameObject> playerPlanets;
-
-
-    #endregion
-
-
-
     #region Methods
 
     private void Start()
     {
-        playerPlanets.Add(FindObjectsOfType<Planet>()[0].gameObject);
-        playerPlanets[0].GetComponent<Planet>().SetState(playerPlanets[0].GetComponent<Planet>().PlayerPlanetState);
-        playerPlanets[0].GetComponent<Planet>().countShips = 50;
+        capturedPlanets.Add(FindObjectsOfType<Planet>()[0]);
+        capturedPlanets[0].SetState(planetState);
+        capturedPlanets[0].countShips = 50;
     }
 
 
@@ -53,7 +40,7 @@ public class PlayerController : MonoBehaviour
         {
             Planet newSelectablePlanet = hit.collider.gameObject.GetComponent<Planet>();
 
-            if (newSelectablePlanet.CurrentState == newSelectablePlanet.PlayerPlanetState)
+            if (newSelectablePlanet.CurrentState == planetState)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0) || Input.touchCount > 0)
                 {
@@ -70,7 +57,7 @@ public class PlayerController : MonoBehaviour
                 }
             }
 
-            if (newSelectablePlanet.CurrentState != newSelectablePlanet.PlayerPlanetState && selectedPlanets.Count != 0)
+            if (newSelectablePlanet.CurrentState != planetState && selectedPlanets.Count != 0)
             {
                 if (Input.GetKeyDown(KeyCode.Mouse0) || Input.touchCount > 0)
                 {
@@ -78,6 +65,8 @@ public class PlayerController : MonoBehaviour
 
                     foreach (var planet in selectedPlanets)
                     {
+                        DeHighlightPlanet(planet);
+                        HighlightPath(planet, targetPlanet);
                         SendShips(planet, targetPlanet);
                     }
 
@@ -104,42 +93,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    private void SendShips(Planet currentPlanet, Planet targetPlanet)
+    private void HighlightPath(Planet currentPlanet, Planet targetPlanet)
     {
         GameObject line = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.Line);
         line.GetComponent<Line>().DrawLine(currentPlanet, targetPlanet);
-
-        DeHighlightPlanet(currentPlanet);
-
-        int countShipsSent = currentPlanet.countShips / 2;
-        
-        currentPlanet.countShips -= countShipsSent;
-
-        for (int i = 0; i < countShipsSent; i++)
-        {
-            GameObject ship = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.PlayerShip);
-            ship.transform.position = new Vector3(currentPlanet.transform.position.x + Random.Range(-0.5f, 0.5f), 
-                                                  currentPlanet.transform.position.y + Random.Range(-0.5f, 0.5f), 
-                                                  currentPlanet.transform.position.z);
-            ship.GetComponent<Ship>().MoveToPlanet(targetPlanet);
-        }
-
-        if (targetPlanet.CurrentState != targetPlanet.PlayerPlanetState)
-        {
-            targetPlanet.countShips -= countShipsSent;
-
-            if (targetPlanet.countShips <= 0)
-            {
-                targetPlanet.SetState(targetPlanet.PlayerPlanetState);                
-                targetPlanet.countShips *= -1;
-                playerPlanets.Add(targetPlanet.gameObject);
-            }
-        }
-        else
-        {
-            targetPlanet.countShips += countShipsSent;
-        }
     }
 
-#endregion
+    #endregion
 }
