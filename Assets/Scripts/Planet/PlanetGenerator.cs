@@ -27,8 +27,7 @@ public class PlanetGenerator : MonoBehaviour
 
         for (int i = 0; i < countPlanet; i++) 
         {
-            float radius = Random.Range(0.5f, 1.0f);
-            GameObject newPlanet = Instantiate(prefab, GetPosition(x, y, radius), Quaternion.identity);
+            GameObject newPlanet = Instantiate(prefab, GetPosition(x, y, prefab.transform.localScale.x / 2), Quaternion.identity);
             
             newPlanet.name = "Planet " + i;
 
