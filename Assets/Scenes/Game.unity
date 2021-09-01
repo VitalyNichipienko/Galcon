@@ -499,11 +499,11 @@ MonoBehaviour:
   pools:
   - type: 0
     prefab: {fileID: 4632344882341263665, guid: e587fe3ca2cd44b418e7c6ed4ee7df89, type: 3}
-    startSize: 2
+    startSize: 0
     root: {fileID: 0}
   - type: 1
     prefab: {fileID: 574687653989898500, guid: 37da8f3f7bd412549a0f2c4e563816a5, type: 3}
-    startSize: 2
+    startSize: 0
     root: {fileID: 0}
   - type: 2
     prefab: {fileID: 2725223781186673406, guid: 8b48faf61aca8fd4a87df95e9380c817, type: 3}

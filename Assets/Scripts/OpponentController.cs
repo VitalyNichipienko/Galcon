@@ -49,7 +49,7 @@ public class OpponentController : Controller
             while (true)
             {
                 targetPlanet = FindObjectsOfType<Planet>()[Random.Range(0, FindObjectsOfType<Planet>().Length)];
-                if (targetPlanet.CurrentState != planetState)
+                if (targetPlanet.CurrentPlanetState != planetState)
                 {
                     foreach (var planet in selectedPlanets)
                     {

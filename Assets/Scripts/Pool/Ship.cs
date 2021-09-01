@@ -1,11 +1,10 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class Ship : MonoBehaviour
 {
     #region Fields       
-        
-    private bool isMove = false;
-    private Planet targetPlanet;
+
     [SerializeField] private float speed;
     [SerializeField] private ObjectPooler.Pool.ObjectType type;
 
@@ -15,27 +14,16 @@ public class Ship : MonoBehaviour
 
     #region Methods
 
-    private void FixedUpdate()
+    public IEnumerator MoveToPlanet(Planet targetPlanet)
     {
-        if (isMove == false)
+        while (transform.position != targetPlanet.transform.position)
         {
-            return;
+            yield return null;
+
+            transform.position = Vector2.MoveTowards(transform.position, targetPlanet.transform.position, speed * Time.deltaTime);
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, targetPlanet.transform.position, speed * Time.deltaTime);
-
-        if (transform.position == targetPlanet.transform.position)
-        {
-            ObjectPooler.Instance.ReturnToPool(type, gameObject);
-        }
-    }
-
-
-    public void MoveToPlanet(Planet targetPlanet)
-    {
-        this.targetPlanet = targetPlanet;
-
-        isMove = true;
+        ObjectPooler.Instance.ReturnToPool(type, gameObject);
     }
 
     #endregion
