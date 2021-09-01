@@ -61,7 +61,12 @@ public abstract class Controller : MonoBehaviour
                 {
                     if (controller != this)
                     {
+                        if (targetPlanet.GetComponentInChildren<Circle>())
+                        {
+                            targetPlanet.GetComponentInChildren<Circle>().DeHighlightPlanet(targetPlanet);
+                        }
                         controller.capturedPlanets.Remove(targetPlanet);
+                        controller.selectedPlanets.Remove(targetPlanet);
                     }
                 }
 
