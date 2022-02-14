@@ -9,6 +9,8 @@ namespace Galcon
 	{
 		#region Fields
 
+		protected const int STARTING_NUMBER_SHIPS = 50;
+
 		[SerializeField] protected PlanetState planetState = default;
 		[SerializeField] protected ObjectPooler.Pool.ObjectType shipsType = default;
 

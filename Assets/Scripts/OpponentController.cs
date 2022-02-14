@@ -20,7 +20,7 @@ namespace Galcon
 		{
 			capturedPlanets.Add(FindObjectsOfType<Planet>()[1]);
 			capturedPlanets[0].SetState(planetState);
-			capturedPlanets[0].CountShips = 50;
+			capturedPlanets[0].CountShips = STARTING_NUMBER_SHIPS;
 
 			StartCoroutine(SelectionPlanet());
 		}
