@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="5be4d988-873b-41e0-8480-db1806078eb4" name="Changes" comment="" />
+    <list default="true" id="5be4d988-873b-41e0-8480-db1806078eb4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.Galcon/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.Galcon/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Controller.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Controller.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Planet/PlanetGenerator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Planet/PlanetGenerator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scripts/Pool/Ship.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scripts/Pool/Ship.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -51,7 +57,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1644745061032</updated>
-      <workItem from="1644745078336" duration="4960000" />
+      <workItem from="1644745078336" duration="5855000" />
+      <workItem from="1644835998751" duration="377000" />
     </task>
     <servers />
   </component>

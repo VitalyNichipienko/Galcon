@@ -8,8 +8,8 @@ namespace Galcon
 	{
 		#region Fields
 
-		[SerializeField] private float speed;
-		[SerializeField] private ObjectPooler.Pool.ObjectType type;
+		[SerializeField] private float speed = default;
+		[SerializeField] private ObjectPooler.Pool.ObjectType type = default;
 
 		#endregion
 

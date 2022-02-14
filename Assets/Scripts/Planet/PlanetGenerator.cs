@@ -8,12 +8,12 @@ namespace Galcon
 	{
 		#region Fields
 
-		[SerializeField] private GameObject prefab;
+		[SerializeField] private GameObject prefab = default;
 
 		private int x;
 		private int y;
 		private int countPlanet = 10;
-		private List<GameObject> planets = new List<GameObject>();
+		private List<GameObject> planets;
 
 		#endregion
 
@@ -25,8 +25,8 @@ namespace Galcon
 		{
 			x = Screen.width / 2 / 100 - 1;
 			y = Screen.height / 2 / 100 - 1;
+			planets = new List<GameObject>();
 
-			Debug.Log("Width = " + x + "   Height = " + y);
 
 			for (int i = 0; i < countPlanet; i++)
 			{

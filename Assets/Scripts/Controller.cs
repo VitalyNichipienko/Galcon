@@ -9,13 +9,13 @@ namespace Galcon
 	{
 		#region Fields
 
-		[SerializeField] protected PlanetState planetState;
-		[SerializeField] protected ObjectPooler.Pool.ObjectType shipsType;
+		[SerializeField] protected PlanetState planetState = default;
+		[SerializeField] protected ObjectPooler.Pool.ObjectType shipsType = default;
 
-		[SerializeField] protected List<Planet> capturedPlanets;
-		[SerializeField] protected List<Planet> selectedPlanets;
+		[SerializeField] protected List<Planet> capturedPlanets = default;
+		[SerializeField] protected List<Planet> selectedPlanets = default;
 
-		protected Planet targetPlanet;
+		protected Planet targetPlanet = default;
 
 		#endregion
 
