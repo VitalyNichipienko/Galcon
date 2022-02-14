@@ -35,7 +35,7 @@ namespace Galcon
 
 		public static ObjectPooler Instance;
 
-		public Pool[] pools = new Pool[Enum.GetNames(typeof(Pool.ObjectType)).Length];
+		[SerializeField] private Pool[] pools = new Pool[Enum.GetNames(typeof(Pool.ObjectType)).Length];
 		private Dictionary<Pool.ObjectType, Queue<GameObject>> poolDictionary;
 
 		#endregion
@@ -43,6 +43,39 @@ namespace Galcon
 
 
 		#region Methods
+
+		public GameObject SpawnFromPool(Pool.ObjectType tag)
+		{
+			if (!poolDictionary.ContainsKey(tag))
+			{
+				Debug.LogWarning($"Pool with tag {tag} doesn't exist");
+				return null;
+			}
+
+			GameObject objectToSpawn;
+
+			if (poolDictionary[tag].Count == 0)
+			{
+				objectToSpawn = Instantiate(pools[(int)tag].prefab);
+				objectToSpawn.transform.SetParent(pools[(int)tag].root);
+			}
+			else
+			{
+				objectToSpawn = poolDictionary[tag].Dequeue();
+				objectToSpawn.SetActive(true);
+			}
+
+			return objectToSpawn;
+		}
+
+
+		public void ReturnToPool(Pool.ObjectType tag, GameObject objectToReturn)
+		{
+			objectToReturn.SetActive(false);
+			objectToReturn.transform.SetParent(pools[(int)tag].root);
+			poolDictionary[tag].Enqueue(objectToReturn);
+		}
+
 
 		private void Awake()
 		{
@@ -77,39 +110,6 @@ namespace Galcon
 
 				poolDictionary.Add(pool.type, objectPool);
 			}
-		}
-
-
-		public GameObject SpawnFromPool(Pool.ObjectType tag)
-		{
-			if (!poolDictionary.ContainsKey(tag))
-			{
-				Debug.LogWarning($"Pool with tag {tag} doesn't exist");
-				return null;
-			}
-
-			GameObject objectToSpawn;
-
-			if (poolDictionary[tag].Count == 0)
-			{
-				objectToSpawn = Instantiate(pools[(int)tag].prefab);
-				objectToSpawn.transform.SetParent(pools[(int)tag].root);
-			}
-			else
-			{
-				objectToSpawn = poolDictionary[tag].Dequeue();
-				objectToSpawn.SetActive(true);
-			}
-
-			return objectToSpawn;
-		}
-
-
-		public void ReturnToPool(Pool.ObjectType tag, GameObject objectToReturn)
-		{
-			objectToReturn.SetActive(false);
-			objectToReturn.transform.SetParent(pools[(int)tag].root);
-			poolDictionary[tag].Enqueue(objectToReturn);
 		}
 
 		#endregion
