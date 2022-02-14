@@ -1,112 +1,123 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class Planet : MonoBehaviour, IPointerClickHandler
+
+namespace Galcon
 {
-    #region Fields
+	public class Planet : MonoBehaviour, IPointerClickHandler
+	{
+		#region Fields
 
-    public int countShips = 0;
-    [Space]
-    [SerializeField] private PlanetState NeutralPlanetState;
-    [SerializeField] private PlanetState PlayerPlanetState;
-    [SerializeField] private PlanetState EnemyPlanetState;
-    private PlanetState CurrentState;
-    [Space]
-    [SerializeField] private float shipSpawnCooldown = 1.0f;
-    [SerializeField] private int countShipsSpawnPerSecond = 5;
-    private bool spawnShipsIsStarted = false;
+		[Space]
+		[SerializeField] private PlanetState NeutralPlanetState = default;
+		[SerializeField] private PlanetState PlayerPlanetState = default;
+		[SerializeField] private PlanetState EnemyPlanetState = default;
+		private PlanetState CurrentState = default;
+		[Space]
+		[SerializeField] private float shipSpawnCooldown = 1.0f;
+		[SerializeField] private int countShipsSpawnPerSecond = 5;
 
-    private Text countShipsText;
-        
-    private Circle circleHighlightingPlanet;
+		private int countShips = 0;
+		private bool spawnShipsIsStarted = false;
 
-    private PlayerController playerController;
+		private Text countShipsText = default;
 
-    #endregion
+		private Circle circleHighlightingPlanet = default;
 
+		private PlayerController playerController = default;
 
-
-    #region Properties
-
-    public Circle CircleHighlightingPlanet => circleHighlightingPlanet;
-
-    public PlanetState CurrentPlanetState => CurrentState;
-
-    #endregion
+		#endregion
 
 
 
-    #region Methods
+		#region Properties
 
-    private void Awake()
-    {
-        SetState(NeutralPlanetState);
+		public Circle CircleHighlightingPlanet => circleHighlightingPlanet;
 
-        countShipsText = GetComponentInChildren<Text>();
-        playerController = FindObjectOfType<PlayerController>();
-    }
+		public PlanetState CurrentPlanetState => CurrentState;
 
+		public int CountShips
+		{
+			get => countShips;
+			set => countShips = Mathf.Clamp(value, 0, Int32.MaxValue);
+		}
 
-    private void FixedUpdate()
-    {
-        countShipsText.text = countShips.ToString();
-    }
+		#endregion
 
 
-    public void SetState(PlanetState state)
-    {
-        CurrentState = state;
-        CurrentState.planet = this;
-        CurrentState.Init();
 
-        if (state != NeutralPlanetState && spawnShipsIsStarted == false)
-        {
-            StartCoroutine(SpawnShips());
-        }
-    }
+		#region Methods
 
+		public void SetState(PlanetState state)
+		{
+			CurrentState = state;
+			CurrentState.planet = this;
+			CurrentState.Init();
 
-    private IEnumerator SpawnShips()
-    {
-        spawnShipsIsStarted = true;
-
-        while (true)
-        {
-            yield return new WaitForSeconds(shipSpawnCooldown);
-
-            countShips += countShipsSpawnPerSecond;
-        }        
-    }
+			if (state != NeutralPlanetState && spawnShipsIsStarted == false)
+			{
+				StartCoroutine(SpawnShips());
+			}
+		}
 
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        if (CurrentState == PlayerPlanetState)
-        {
-            if (!playerController.SelectedPlanets.Contains(this))
-            {
-                GameObject obj = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.Circle);
-                circleHighlightingPlanet = obj.GetComponent<Circle>();
-                circleHighlightingPlanet.HighlightPlanet(this);
+		public void OnPointerClick(PointerEventData eventData)
+		{
+			if (CurrentState == PlayerPlanetState)
+			{
+				if (!playerController.SelectedPlanets.Contains(this))
+				{
+					circleHighlightingPlanet = ObjectPooler.Instance.SpawnFromPool(ObjectPooler.Pool.ObjectType.Circle).GetComponent<Circle>();
+					circleHighlightingPlanet.HighlightPlanet(this);
 
-                playerController.SelectPlanet(this, false);
-            }
-            else
-            {
-                circleHighlightingPlanet.DeHighlightPlanet(this);
-                circleHighlightingPlanet = null;
+					playerController.SelectPlanet(this, false);
+				}
+				else
+				{
+					circleHighlightingPlanet.DeHighlightPlanet(this);
+					circleHighlightingPlanet = null;
 
-                playerController.SelectPlanet(this, true);
-            }            
-        }
+					playerController.SelectPlanet(this, true);
+				}
+			}
 
-        if (CurrentState != PlayerPlanetState && playerController.SelectedPlanets.Count != 0)
-        {
-            playerController.AttackPlanet(this);
-        }
-    }
+			if (CurrentState != PlayerPlanetState && playerController.SelectedPlanets.Count != 0)
+			{
+				playerController.AttackPlanet(this);
+			}
+		}
 
-    #endregion
+
+		private void Awake()
+		{
+			SetState(NeutralPlanetState);
+
+			countShipsText = GetComponentInChildren<Text>();
+			playerController = FindObjectOfType<PlayerController>();
+		}
+
+
+		private void FixedUpdate()
+		{
+			countShipsText.text = countShips.ToString();
+		}
+
+
+		private IEnumerator SpawnShips()
+		{
+			spawnShipsIsStarted = true;
+
+			while (true)
+			{
+				yield return new WaitForSeconds(shipSpawnCooldown);
+
+				countShips += countShipsSpawnPerSecond;
+			}
+		}
+
+		#endregion
+	}
 }

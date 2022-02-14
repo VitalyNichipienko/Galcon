@@ -1,69 +1,73 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class OpponentController : Controller
+
+namespace Galcon
 {
-    #region
+	public class OpponentController : Controller
+	{
+		#region
 
-    [SerializeField] private float decisionSpeed = 5.0f;
+		[SerializeField] private float decisionSpeed = 5.0f;
 
-    #endregion
-
-
-
-    #region Methods
-
-    private void Start()
-    {
-        capturedPlanets.Add(FindObjectsOfType<Planet>()[1]);
-        capturedPlanets[0].SetState(planetState);
-        capturedPlanets[0].countShips = 50;
-
-        StartCoroutine(SelectionPlanet());
-    }
+		#endregion
 
 
-    private IEnumerator SelectionPlanet()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(decisionSpeed);
 
-            if (capturedPlanets.Count == 0 || capturedPlanets.Count >= FindObjectsOfType<Planet>().Length)
-            {
-                gameObject.SetActive(false);
-                break;
-            }
+		#region Methods
 
-            selectedPlanets.Add(capturedPlanets[Random.Range(0, capturedPlanets.Count)]);
+		private void Start()
+		{
+			capturedPlanets.Add(FindObjectsOfType<Planet>()[1]);
+			capturedPlanets[0].SetState(planetState);
+			capturedPlanets[0].CountShips = 50;
 
-            for (int i = 0; i < capturedPlanets.Count; i++)
-            {
-                float rand = Random.Range(0.0f, 1.0f);
-                if (rand >= 0.8 && !selectedPlanets.Contains(capturedPlanets[i]))
-                {
-                    selectedPlanets.Add(capturedPlanets[i]);
-                }
-            }
+			StartCoroutine(SelectionPlanet());
+		}
 
-            while (true)
-            {
-                targetPlanet = FindObjectsOfType<Planet>()[Random.Range(0, FindObjectsOfType<Planet>().Length)];
-                if (targetPlanet.CurrentPlanetState != planetState)
-                {
-                    foreach (var planet in selectedPlanets)
-                    {
-                        SendShips(planet, targetPlanet);
-                    }
 
-                    selectedPlanets.Clear();
-                    targetPlanet = null;
+		private IEnumerator SelectionPlanet()
+		{
+			while (true)
+			{
+				yield return new WaitForSeconds(decisionSpeed);
 
-                    break;
-                }
-            }
-        }
-    }
+				if (capturedPlanets.Count == 0 || capturedPlanets.Count >= FindObjectsOfType<Planet>().Length)
+				{
+					gameObject.SetActive(false);
+					break;
+				}
 
-    #endregion
+				selectedPlanets.Add(capturedPlanets[Random.Range(0, capturedPlanets.Count)]);
+
+				for (int i = 0; i < capturedPlanets.Count; i++)
+				{
+					float rand = Random.Range(0.0f, 1.0f);
+					if (rand >= 0.8 && !selectedPlanets.Contains(capturedPlanets[i]))
+					{
+						selectedPlanets.Add(capturedPlanets[i]);
+					}
+				}
+
+				while (true)
+				{
+					targetPlanet = FindObjectsOfType<Planet>()[Random.Range(0, FindObjectsOfType<Planet>().Length)];
+					if (targetPlanet.CurrentPlanetState != planetState)
+					{
+						foreach (var planet in selectedPlanets)
+						{
+							SendShips(planet, targetPlanet);
+						}
+
+						selectedPlanets.Clear();
+						targetPlanet = null;
+
+						break;
+					}
+				}
+			}
+		}
+
+		#endregion
+	}
 }

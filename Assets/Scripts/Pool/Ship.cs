@@ -1,30 +1,35 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class Ship : MonoBehaviour
+
+namespace Galcon
 {
-    #region Fields       
+	public class Ship : MonoBehaviour
+	{
+		#region Fields
 
-    [SerializeField] private float speed;
-    [SerializeField] private ObjectPooler.Pool.ObjectType type;
+		[SerializeField] private float speed;
+		[SerializeField] private ObjectPooler.Pool.ObjectType type;
 
-    #endregion
+		#endregion
 
 
 
-    #region Methods
+		#region Methods
 
-    public IEnumerator MoveToPlanet(Planet targetPlanet)
-    {
-        while (transform.position != targetPlanet.transform.position)
-        {
-            yield return null;
+		public IEnumerator MoveToPlanet(Planet targetPlanet)
+		{
+			while (transform.position != targetPlanet.transform.position)
+			{
+				yield return null;
 
-            transform.position = Vector2.MoveTowards(transform.position, targetPlanet.transform.position, speed * Time.deltaTime);
-        }
+				transform.position = Vector2.MoveTowards(transform.position,
+					targetPlanet.transform.position, speed * Time.deltaTime);
+			}
 
-        ObjectPooler.Instance.ReturnToPool(type, gameObject);
-    }
+			ObjectPooler.Instance.ReturnToPool(type, gameObject);
+		}
 
-    #endregion
+		#endregion
+	}
 }
